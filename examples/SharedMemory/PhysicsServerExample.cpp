@@ -672,7 +672,6 @@ public:
         
 	GUIHelperInterface* m_childGuiHelper;
 
-	btHashMap<btHashPtr, int> m_cachedTextureIds;
 	int m_uidGenerator;
 	const unsigned char* m_texels;
 	int m_textureWidth;
@@ -891,11 +890,6 @@ public:
 	}
 	virtual int registerTexture(const unsigned char* texels, int width, int height)
 	{
-		int* cachedTexture = m_cachedTextureIds[texels];
-		if (cachedTexture)
-		{
-			return *cachedTexture;
-		}
 		m_texels = texels;
 		m_textureWidth = width;
 		m_textureHeight = height;
@@ -904,7 +898,7 @@ public:
 		m_cs->setSharedParam(1, eGUIHelperRegisterTexture);
 
 		workerThreadWait();
-		m_cachedTextureIds.insert(texels, m_textureId);
+
 		return m_textureId;
 	}
 	virtual int registerGraphicsShape(const float* vertices, int numvertices, const int* indices, int numIndices, int primitiveType, int textureId)
@@ -958,7 +952,6 @@ public:
 
 	virtual void removeAllGraphicsInstances()
 	{
-		m_cachedTextureIds.clear();
 		m_cs->lock();
 		m_cs->setSharedParam(1, eGUIHelperRemoveAllGraphicsInstances);
 		workerThreadWait();

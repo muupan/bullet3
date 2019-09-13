@@ -488,7 +488,7 @@ static PyObject* pybullet_connectPhysicsServer(PyObject* self, PyObject* args, P
 #ifdef BT_ENABLE_PHYSX
 			case eCONNECT_PHYSX:
 			{
-				sm = b3ConnectPhysX(argc, argv);
+				sm = b3ConnectPhysX();
 				break;
 			}
 #endif

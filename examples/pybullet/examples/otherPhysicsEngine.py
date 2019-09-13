@@ -1,25 +1,32 @@
 import pybullet as p
-import pybullet_data as pd
 import time
 import math
 
 usePhysX = True
-useMaximalCoordinates = True
 if usePhysX:
+<<<<<<< HEAD
   p.connect(p.PhysX, options="--numCores=8 --solver=pgs")
+=======
+  p.connect(p.PhysX)
+>>>>>>> parent of f51555d1a... Merge pull request #2134 from erwincoumans/physx_clean
   p.loadPlugin("eglRendererPlugin")
 else:
   p.connect(p.GUI)
 
+<<<<<<< HEAD
 p.setPhysicsEngineParameter(fixedTimeStep=1. / 240.,
                             numSolverIterations=4,
                             minimumSolverIslandSize=1024)
 p.setPhysicsEngineParameter(contactBreakingThreshold=0.01)
+=======
+p.loadURDF("plane.urdf")
+>>>>>>> parent of f51555d1a... Merge pull request #2134 from erwincoumans/physx_clean
 
-p.setAdditionalSearchPath(pd.getDataPath())
-#Always make ground plane maximal coordinates, to avoid performance drop in PhysX
-#See https://github.com/NVIDIAGameWorks/PhysX/issues/71
+for i in range (10):
+  sphere = p.loadURDF("marble_cube.urdf",[0,-1,1+i*1], useMaximalCoordinates=False)
+p.changeDynamics(sphere ,-1, mass=1000)
 
+<<<<<<< HEAD
 p.loadURDF("plane.urdf", useMaximalCoordinates=True)  #useMaximalCoordinates)
 p.configureDebugVisualizer(p.COV_ENABLE_TINY_RENDERER, 0)
 p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, 0)
@@ -62,6 +69,10 @@ print("loaded!")
 
 door = p.loadURDF("door.urdf", [0, 0, -11])
 p.changeDynamics(door, 1, linearDamping=0, angularDamping=0, jointDamping=0, mass=1)
+=======
+door = p.loadURDF("door.urdf",[0,0,1])
+p.changeDynamics(door ,1, linearDamping=0, angularDamping=0, jointDamping=0, mass=1)
+>>>>>>> parent of f51555d1a... Merge pull request #2134 from erwincoumans/physx_clean
 print("numJoints = ", p.getNumJoints(door))
 
 p.setGravity(0, 0, -10)
@@ -75,6 +86,7 @@ prevTime = time.time()
 
 angle = math.pi * 0.5
 
+<<<<<<< HEAD
 count = 0
 while (1):
   count += 1
@@ -82,6 +94,10 @@ while (1):
     p.stopStateLogging(logId)
     p.configureDebugVisualizer(p.COV_ENABLE_RENDERING, 1)
 
+=======
+while (1):
+  
+>>>>>>> parent of f51555d1a... Merge pull request #2134 from erwincoumans/physx_clean
   curTime = time.time()
 
   diff = curTime - prevTime
@@ -91,6 +107,7 @@ while (1):
     prevTime = curTime
 
   if position_control:
+<<<<<<< HEAD
     p.setJointMotorControl2(door,
                             1,
                             p.POSITION_CONTROL,
@@ -102,5 +119,10 @@ while (1):
     p.setJointMotorControl2(door, 1, p.VELOCITY_CONTROL, targetVelocity=1, force=1011)
   #contacts = p.getContactPoints()
   #print("contacts=",contacts)
+=======
+    p.setJointMotorControl2(door,1,p.POSITION_CONTROL, targetPosition = angle, positionGain=10.1, velocityGain=1, force=11.001)
+  else:  
+    p.setJointMotorControl2(door,1,p.VELOCITY_CONTROL, targetVelocity=1, force=1011)
+>>>>>>> parent of f51555d1a... Merge pull request #2134 from erwincoumans/physx_clean
   p.stepSimulation()
-  #time.sleep(1./240.)
+  time.sleep(1./240.)
